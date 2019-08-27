@@ -5,6 +5,8 @@ import React,{Component} from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import './login.less';
 import logo from '../../assets/images/logo.jpg';
+import { reqLogin } from '../../api';
+import {message} from 'antd';
 
 const Item = Form.Item;
 /**
@@ -22,7 +24,7 @@ class Login extends Component{
             <div className="login">
                 <div className="login-header">
                     <img src={logo} alt="logo"/>
-                    <h1>REACT-BETA系统</h1>
+                    <h1>REACT-BETA-SYS</h1>
                 </div>
                 <div className="login-content">
                     <h1>用户登录</h1>
@@ -32,7 +34,7 @@ class Login extends Component{
                                     initialValue:'',
                                     rules:[
                                         {required:true,whitespace:true,message:'用户名必填！'},
-                                        {min:4,message:'长度大于等于4位！'},
+                                        {min:2,message:'长度大于等于2位！'},
                                         {max:12,message:'长度不得大于12位！'},
                                         {pattern:/^[a-zA-Z0-9_]+$/,message:'用户名包含字母、数字或下划线！'},
                                     ]
@@ -69,15 +71,20 @@ class Login extends Component{
         e.preventDefault();
 /*        const form =  this.props.form;
         const props = form.getFieldsValue();
-        const username = form.getFieldValue('username');
+        const username = form.getFieldValue('userno');
         const password = form.getFieldValue('password');
         console.error(username,password);*/
-
-        this.props.form.validateFields((err,{username,password})=>{
+        this.props.form.validateFields(async (err,{userno,password})=>{
             if(!err){
-                alert(`发送ajax请求，username=${username},password=${password}`);
+              const result = await reqLogin(userno,password);
+              if(result.status === 0){
+                this.props.history.replace('/');
+                message.success('登录成功！');
+              }else{
+                message.error(result.msg);
+              }
             }else{
-                alert(`验证失败！`);
+                message.error('验证失败！');
             }
         })
     }
@@ -86,9 +93,9 @@ class Login extends Component{
         value = value.trim();
         if(!value){
             callback('密码必填！');
-        }else if(value.length <4){
-            callback('密码大于等于4！');
-        }else if(value.length >12){
+        }else if(value.length < 2){
+            callback('密码大于等于2！');
+        }else if(value.length > 12){
             callback('密码小于等于12！');
         }else if(!/^[a-zA-Z0-9_]+$/.test(value)){
             callback('用户名包含字母、数字或下划线！');

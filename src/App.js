@@ -6,8 +6,8 @@
  */
 
 import React,{Component} from 'react';
-import {Button,message} from 'antd';
-import {BrowserRouter,HashRouter,Switch,Route} from "react-router-dom";
+import {message} from 'antd';
+import {BrowserRouter,Switch,Route} from "react-router-dom";
 import Login from './pages/login/login.js'
 import Admin from './pages/admin/admin.js'
 
@@ -22,8 +22,8 @@ class App extends Component{
         return(
             <BrowserRouter>
                 <Switch>
-                    <Route path="/" component={Login}/>
-                    <Route path="/admin" component={Admin}/>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/" component={Admin}/>
                 </Switch>
             </BrowserRouter>
         )
