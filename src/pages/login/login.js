@@ -8,7 +8,8 @@ import logo from '../../assets/images/logo.jpg';
 import { reqLogin } from '../../api';
 import {message} from 'antd';
 import {Redirect} from 'react-router-dom';
-import storageUtils from '../../utils/storageutils';
+import storageUtils from '../../utils/storageUtils';
+import memoryUtils from '../../utils/memoryUtils';
 
 const Item = Form.Item;
 /**
@@ -23,7 +24,8 @@ class Login extends Component{
     render(){
         // let kitem = localStorage.getItem('user_key');
         // let res = JSON.parse(kitem);
-        let res = storageUtils.getUser();
+        // let res = storageUtils.getUser();
+        let res = memoryUtils.user;
         if(res && res.data !== undefined){
           return <Redirect to="./"/>
         }
@@ -83,12 +85,14 @@ class Login extends Component{
         const username = form.getFieldValue('userno');
         const password = form.getFieldValue('password');
         console.error(username,password);*/
-        this.props.form.validateFields(async (err,{userno,password})=>{
+        this.props.form.validateFields(async (err, {userno,password})=>{
             if(!err){
               const result = await reqLogin(userno,password);
               if(result.status === 0){
                 // localStorage.setItem('user_key',JSON.stringify(result));
                 storageUtils.saveUser(result);
+                //保存到内存中
+                memoryUtils.user = result;
                 this.props.history.replace('/');
                 message.success(result.msg);
               }else{
