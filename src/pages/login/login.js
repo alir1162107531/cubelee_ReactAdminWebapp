@@ -7,6 +7,8 @@ import './login.less';
 import logo from '../../assets/images/logo.jpg';
 import { reqLogin } from '../../api';
 import {message} from 'antd';
+import {Redirect} from 'react-router-dom';
+import storageUtils from '../../utils/storageutils';
 
 const Item = Form.Item;
 /**
@@ -19,6 +21,13 @@ const Item = Form.Item;
 class Login extends Component{
 
     render(){
+        // let kitem = localStorage.getItem('user_key');
+        // let res = JSON.parse(kitem);
+        let res = storageUtils.getUser();
+        if(res && res.data !== undefined){
+          return <Redirect to="./"/>
+        }
+
         const {getFieldDecorator} = this.props.form;
         return (
             <div className="login">
@@ -30,7 +39,7 @@ class Login extends Component{
                     <h1>用户登录</h1>
                     <Form onSubmit={this.handleSubmit} className="login-form">
                         <Item>
-                            {   getFieldDecorator('username',{
+                            {   getFieldDecorator('userno',{
                                     initialValue:'',
                                     rules:[
                                         {required:true,whitespace:true,message:'用户名必填！'},
@@ -78,10 +87,12 @@ class Login extends Component{
             if(!err){
               const result = await reqLogin(userno,password);
               if(result.status === 0){
+                // localStorage.setItem('user_key',JSON.stringify(result));
+                storageUtils.saveUser(result);
                 this.props.history.replace('/');
-                message.success('登录成功！');
+                message.success(result.msg);
               }else{
-                message.error(result.msg);
+                message.error(result.msg + '请检查用户名和密码！');
               }
             }else{
                 message.error('验证失败！');
