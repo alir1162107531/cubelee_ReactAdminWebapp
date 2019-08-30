@@ -90,9 +90,9 @@ class Login extends Component{
               const result = await reqLogin(userno,password);
               if(result.status === 0){
                 // localStorage.setItem('user_key',JSON.stringify(result));
-                storageUtils.saveUser(result);
+                storageUtils.saveUser(result.data);
                 //保存到内存中
-                memoryUtils.user = result;
+                memoryUtils.user = result.data;
                 this.props.history.replace('/');
                 message.success(result.msg);
               }else{
