@@ -19,11 +19,12 @@ class App extends Component{
     }
 
     render() {
+        //模糊匹配，‘/’必须写在最后
         return(
             <BrowserRouter>
                 <Switch>
                     <Route path="/login" component={Login}/>
-                    <Route path="/" component={Admin}/>
+                    <Route path="/" component={Admin}/> 
                 </Switch>
             </BrowserRouter>
         )

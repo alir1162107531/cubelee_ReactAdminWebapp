@@ -28,7 +28,7 @@ export function formateDate(t) {
     if(ss < 10)
      ss = '0' + ss;
     let ww = time.getDay();
-    if(ww === 0)  ww="星期日1";
+    if(ww === 0)  ww="星期日";
     if(ww === 1)  ww="星期一";
     if(ww === 2)  ww="星期二";
     if(ww === 3)  ww="星期三";
