@@ -3,7 +3,6 @@
  */
 import React,{Component} from 'react';
 import {Redirect,Switch,Route} from 'react-router-dom';
-import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import {Layout} from 'antd';
 import LeftNav from '../../components/left-nav';
@@ -56,7 +55,7 @@ export default class Admin extends Component{
                         </Switch>      
                     </Content>
                     <Footer style={{textAlign:'center',color:'rgba(0,0,0,0.5)'}}>
-                        推荐使用google浏览器，可以获得更佳的页面体验
+                        推荐使用Chrome浏览器，可以获得更佳的页面体验
                     </Footer>
                 </Layout>
             </Layout>
