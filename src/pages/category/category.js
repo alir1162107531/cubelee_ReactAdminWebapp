@@ -1,28 +1,8 @@
 import React,{Component} from 'react';
 import {Card,Button,Icon,Table, Modal, message} from 'antd';
-import LinkButton from '../../components/link-button'
-import {reqCategorys, reqAddCategory,reqUpdateCategory} from '../../api';
+import LinkButton from '../../components/link-button';
+import {reqCategorys, reqAddCategory,reqUpdateCategory,reqDelCategory} from '../../api';
 import AddUpdateForm from './add-update-form';
-// import './home.less';
-
-// const data = [
-//   {
-//     key:'1',
-//     name:'1',
-//     money:'￥1',
-//     address:'New York1'
-//   }, {
-//     key:'2',
-//     name:'2',
-//     money:'￥2',
-//     address:'New York2'
-//   }, {
-//     key:'3',
-//     name:'3',
-//     money:'￥3',
-//     address:'New York3'
-//   },
-// ];
 
 export default class Category extends Component{
 
@@ -42,12 +22,25 @@ export default class Category extends Component{
           title: '分类编码',
           dataIndex: 'cgno'
         },{
+          title: '描述',
+          dataIndex: 'description'
+        },{
           title: '操作',
           width:300,
-          render: (category) =><LinkButton onClick={()=>{
-            this.category = category;
-            this.setState({showStatus:2})
-          }}>修改分类</LinkButton>
+          render: (category) =>(
+            <span>
+              <LinkButton onClick={()=>{
+                this.category = category;
+                this.setState({showStatus:2});
+              }}>修改分类
+              </LinkButton>
+              <LinkButton onClick={()=>{
+                this.category = category;
+                this.delCategory();
+              }}>删除分类
+              </LinkButton>
+            </span>
+          )
         }
       ];
     }
@@ -70,20 +63,39 @@ export default class Category extends Component{
        }
     }
 
+    delCategory = ()=>{
+      Modal.confirm({
+        title: '确认删除该商品分类吗？',
+        onOk: async ()=>{
+          const categoryId = this.category.id;
+          const result =await reqDelCategory({categoryId});
+          if(result.code ===0){
+            this.getCategorys();
+            message.success(result.msg);
+          }else{
+            message.error('删除失败！');
+          }
+        },
+        onCancel:()=>{
+         console.log('取消');
+        }
+      })
+    }
+
     handleOk = async () =>{
     // 进行表单验证
     this.form.validateFields(async (err, values) => {
       if (!err) {
         // 验证通过后, 得到输入数据
-        const {categoryNo,categoryName} = values;
+        const {categoryNo,categoryName,categoryDesc} = values;
         const {showStatus} = this.state;
         let result = null;
         if (showStatus === 1) { // 添加
           // 发添加分类的请求
-          result = await reqAddCategory({categoryNo,categoryName});
+          result = await reqAddCategory({categoryNo,categoryName,categoryDesc});
         } else { // 修改
           const categoryId = this.category.id;
-          result = await reqUpdateCategory({ categoryId,categoryNo, categoryName });
+          result = await reqUpdateCategory({ categoryId,categoryNo,categoryName,categoryDesc });
         }
 
         this.form.resetFields(); // 重置输入数据(变成了初始值)
@@ -141,13 +153,21 @@ export default class Category extends Component{
                     bordered = {true}
                     columns = {this.columns}
                     dataSource = {categorys}
-                    pagination = {{defaultPageSize:3,showQuickJumper:true}}/>
+                    pagination = {{
+                      defaultPageSize:3,
+                      showQuickJumper:true
+                    }}/>
                   <Modal
                     title = {showStatus===1?"添加分类":"修改分类"}
                     visible = {showStatus!==0}
                     onOk = {this.handleOk}
                     onCancel = {this.handleCancel}>
-                    <AddUpdateForm setForm={form=>this.form = form} category={{categoryNo:category.cgno,categoryName:category.name}}/>
+                    <AddUpdateForm setForm={form=>this.form = form} 
+                    category={{
+                      categoryNo:category.cgno,
+                      categoryName:category.name,
+                      categoryDesc:category.description
+                    }}/>
                   </Modal>
                 </Card>
             </div>

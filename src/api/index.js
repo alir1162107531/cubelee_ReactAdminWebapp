@@ -47,14 +47,29 @@ export const reqWeather = (city)=>{
 export const reqCategorys = ()=>ajax('/manage/category/list')
 
 // 添加分类
-export const reqAddCategory = ({categoryNo,categoryName}) => ajax.post('/manage/category/add',{
+export const reqAddCategory = ({categoryNo,categoryName,categoryDesc}) => ajax.post('/manage/category/add',{
   categoryNo,
-  categoryName
+  categoryName,
+  categoryDesc
 })
 
-// 添加分类
-export const reqUpdateCategory = ({categoryId,categoryNo,categoryName}) => ajax.post('/manage/category/update',{
+// 更新分类
+export const reqUpdateCategory = ({categoryId,categoryNo,categoryName,categoryDesc}) => ajax.post('/manage/category/update',{
   categoryId,
   categoryNo,
-  categoryName
+  categoryName,
+  categoryDesc
+})
+
+export const reqDelCategory = ({categoryId}) => ajax.post('/manage/category/delete',{
+  categoryId
+})
+
+// 获取商品列表
+
+export const reqProducts =(pageNum,pageSize) =>ajax.get('/manage/product/list',{
+  params:{//包含所有query参数的对象
+    pageNum,
+    pageSize
+  }
 })

@@ -23,7 +23,7 @@ class AddUpdateForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { categoryNo,categoryName} = this.props.category;
+    const { categoryNo,categoryName,categoryDesc} = this.props.category;
     // const { categoryName } = this.props;
 
     
@@ -59,6 +59,15 @@ class AddUpdateForm extends Component {
               rules: [
                 {required: true, message: '分类名称必须输入'}
               ]
+            })(
+              <Input type="text" placeholder="请输入分类名称" />
+            )
+          }
+        </Item>
+        <Item label="描述">
+          {
+            getFieldDecorator('categoryDesc', {
+              initialValue: categoryDesc || ''
             })(
               <Input type="text" placeholder="请输入分类名称" />
             )
