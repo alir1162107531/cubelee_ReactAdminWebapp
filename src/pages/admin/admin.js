@@ -9,14 +9,16 @@ import LeftNav from '../../components/left-nav';
 import TopHead from '../../components/top-head';
 
 import Home from '../home/home';
-import Category from '../category/category'
-import Product from '../product/product'
-import Role from '../role/role'
-import User from '../user/user'
-import Bar from '../charts/bar'
-import Line from '../charts/line'
-import Pie from '../charts/pie'
+import Category from '../category/category';
+import Product from '../product/product';
+import Role from '../role/role';
+import User from '../user/user';
+import Bar from '../charts/bar';
+import Line from '../charts/line';
+import Pie from '../charts/pie';
 
+
+import './admin.less';
 const {Footer,Sider,Content} = Layout;
 
 export default class Admin extends Component{
@@ -54,8 +56,8 @@ export default class Admin extends Component{
                             <Redirect to="/home"/>
                         </Switch>      
                     </Content>
-                    <Footer style={{textAlign:'center',color:'rgba(0,0,0,0.5)'}}>
-                        推荐使用Chrome浏览器，可以获得更佳的页面体验
+                    <Footer className = "footer">
+                        <h4>推荐使用Chrome浏览器，可以获得更佳的页面体验</h4>
                     </Footer>
                 </Layout>
             </Layout>

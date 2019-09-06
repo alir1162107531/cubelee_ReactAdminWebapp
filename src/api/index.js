@@ -67,9 +67,24 @@ export const reqDelCategory = ({categoryId}) => ajax.post('/manage/category/dele
 
 // 获取商品列表
 
-export const reqProducts =(pageNum,pageSize) =>ajax.get('/manage/product/list',{
+// export const reqProducts =(pageNum,pageSize) =>ajax.post('/manage/product/list',{
+//   params:{//包含所有query参数的对象
+//     pageNum,
+//     pageSize
+//   }
+// })
+
+export const reqProducts =({pageNum,pageSize,conditions}) =>ajax.post('/manage/product/list',{
   params:{//包含所有query参数的对象
     pageNum,
-    pageSize
+    pageSize,
+    conditions:conditions
   }
+})
+
+export const reqAddProduct =({productName,productNo,productPrice,productDesc}) =>ajax.post('/manage/product/add',{
+  productName,
+  productNo,
+  productPrice,
+  productDesc
 })
