@@ -1,3 +1,36 @@
-.home{
-    
+.home-bg{
+    transform: rotateX(80deg);
+    -webkit-transform: rotateX(80deg);
+    display: block;
+    z-index: 1;
+    img{
+      border: 0;
+      padding: 0;
+      list-style-type: none;
+      border-style: none;
+      position: absolute;
+      top: -15rem;
+      left: 62px;
+      right: 0;
+      margin: auto;
+      display: inline-block;
+      width: 50%;
+      animation: rotate 12s linear infinite;
+      .fa-spin12s{
+        @keyframes rotate {
+          0% {
+            transform:rotateZ(0deg);
+          }
+          100% {
+            transform: rotateZ(360deg);
+          }
+        }
+       }
+    }
+}
+
+#map{
+  width: 60vw;
+  height: 60vh;
+  margin-left: 10rem;
 }
