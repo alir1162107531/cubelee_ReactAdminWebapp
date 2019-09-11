@@ -144,13 +144,21 @@ export default class Home extends Component{
       mapChart.setOption(option);
     }
 
+    initStyle = ()=>{
+      let $dom = document.getElementById
+    }
+
+    componentWillMount(){
+      this.initStyle();
+    }
+
     componentDidMount(){
         this.initDatas();
     }
 
     render(){
         return (
-              <div>
+              <div className= "homemain">
                   <div id="map"></div>
                   <span className="home-bg">
                       <img className="fa-spin12s" src="http://cdn.files.51wyq.cn/web/css/indexV4/base/images/map-rootbg.png?v=201909052200" alt="动态图" />

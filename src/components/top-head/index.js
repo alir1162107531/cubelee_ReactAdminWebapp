@@ -39,7 +39,7 @@ class TopHead extends Component{
         if(it.key === path){
           title = it.title;
         }else if(it.children){
-          let child =it.children.find(at=>at.key === path);
+          let child =it.children.find(at=>path.indexOf(at.key) === 0);
           if(child){
             title = child.title;
           }

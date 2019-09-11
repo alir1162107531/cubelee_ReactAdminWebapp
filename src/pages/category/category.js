@@ -137,7 +137,7 @@ export default class Category extends Component{
 
         const extra = (
           <Button type="primary" onClick={()=>{
-            this.category = null;
+            this.category = {};
             this.setState({showStatus:1})}}>
             <Icon type="plus" />
             添加
