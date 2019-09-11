@@ -104,6 +104,8 @@ export const reqUpdateProduct = (item) => ajax.post('/manage/product/update',{
     item
 })
 
+export const reqAddUpdateProduct =(item)=>ajax.post('/manage/product/'+(item.id?'update':'add'),item)
+
 export const reqDelProduct = ({productId}) => ajax.post('/manage/product/delete',{
   productId
 })

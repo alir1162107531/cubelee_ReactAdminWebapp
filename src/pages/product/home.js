@@ -11,7 +11,7 @@ import {
 } from 'antd'
 import throttle from 'lodash.throttle';
 import LinkButton from '../../components/link-button';
-import {reqAddProduct,reqProducts,reqUpdateProduct,reqDelProduct} from '../../api';
+import {reqAddProduct,reqProducts,reqUpdateProduct,reqAddUpdateProduct,reqDelProduct} from '../../api';
 import memoryUtils from '../../utils/memoryUtils';
 
 
@@ -152,7 +152,7 @@ export default class ProductHome extends Component{
   updateStatus = throttle(async (productId,productStatus)=>{
       productStatus = productStatus===0?1:0;
       let product = {id:productId,status:productStatus};
-      const result = await reqUpdateProduct(product);
+      const result = await reqAddUpdateProduct(product);
       if(result.code === 0){
         message.success(result.msg);
         this.getProducts(this.pageNum);

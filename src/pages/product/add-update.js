@@ -1,6 +1,6 @@
 import React,{ Component } from "react";
 import {Card,Icon,Form,Input,Select,Button,message} from 'antd';
-import {reqCategorys,reqUpdateProduct} from '../../api';
+import {reqCategorys,reqUpdateProduct,reqAddUpdateProduct} from '../../api';
 // import PicturesWall from './pictures-wall';
 import memoryUtils from '../../utils/memoryUtils';
 // import RichTextEditor from './rich-text-editor';
@@ -49,7 +49,7 @@ class ProductAddUpdate extends Component{
   // 进行统一的表单验证
   this.props.form.validateFields(async (err, values) => {
      if (!err) {
-       const {name, description, price, category} = values
+       const {name,cpno, description, price, category} = values
        console.log('发送请求', name, description, price, category)
 
        // 收集上传的图片文件名的数组
@@ -61,13 +61,13 @@ class ProductAddUpdate extends Component{
 
        // 封装product对象
       //  const product = {name, description, price, category, imgs, detail}
-       const product = {name, description, price, category}
+       const product = {name,cpno, description, price, category}
        if (this.isUpdate) {
          product.id = this.product.id
        }
 
        // 发请求添加或修改
-       const result = await reqUpdateProduct(product)
+       const result = await reqAddUpdateProduct(product)
        if (result.code === 0) {
          message.success(`${this.isUpdate ? '修改' : '添加'}商品成功`)
          this.props.history.replace('/product')
