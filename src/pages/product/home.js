@@ -14,6 +14,8 @@ import LinkButton from '../../components/link-button';
 import {reqAddProduct,reqProducts,reqUpdateProduct,reqAddUpdateProduct,reqDelProduct} from '../../api';
 import memoryUtils from '../../utils/memoryUtils';
 
+import './product.less';
+
 
 const Option = Select.Option;
 
@@ -47,7 +49,7 @@ export default class ProductHome extends Component{
         dataIndex: 'description'
       },{
         title:'状态',
-        width:100,
+        width:150,
         // dataIndex: 'status',
         render: ({id,status})=>{
           let btnText ='下架';
@@ -58,7 +60,7 @@ export default class ProductHome extends Component{
           }
           return (
             <span>
-              <span>{text}</span><br/>
+              <span>{text}</span>&nbsp;&nbsp;
               <button onClick={()=>{
                 this.updateStatus(id,status);
               }}>{btnText}</button>
@@ -70,8 +72,8 @@ export default class ProductHome extends Component{
         dataIndex: 'category'
       },{
         title: '操作',
-        width:100,
-        render: (product) =>(
+        width:200,
+        render: product =>(
           <span>
             <LinkButton onClick={()=>{
               memoryUtils.product = product;
@@ -79,7 +81,7 @@ export default class ProductHome extends Component{
             }}>详情</LinkButton>
             <LinkButton onClick={()=>{
               memoryUtils.product = product;
-              this.props.history.push('/product/addupdate');
+              this.props.history.push('/product/addupdate',product);
             }}>修改
             </LinkButton>
             <LinkButton onClick={()=>{

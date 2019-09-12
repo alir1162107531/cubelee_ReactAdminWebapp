@@ -145,7 +145,7 @@ export default class Home extends Component{
     }
 
     initStyle = ()=>{
-      let $dom = document.getElementById
+      // let $dom = document.getElementById
     }
 
     componentWillMount(){

@@ -78,7 +78,8 @@ class ProductAddUpdate extends Component{
    })
 }
 componentWillMount () {
-  this.product = memoryUtils.product;
+  const product = this.props.location.state;
+  this.product = product || {};
   this.isUpdate = !!this.product.id;
 }
 
