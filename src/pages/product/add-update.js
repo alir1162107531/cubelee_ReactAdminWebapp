@@ -1,8 +1,7 @@
 import React,{ Component } from "react";
 import {Card,Icon,Form,Input,Select,Button,message} from 'antd';
-import {reqCategorys,reqUpdateProduct,reqAddUpdateProduct} from '../../api';
-// import PicturesWall from './pictures-wall';
-import memoryUtils from '../../utils/memoryUtils';
+import {reqCategorys,reqAddUpdateProduct} from '../../api';
+import PicturesWall from './pictures-wall';
 // import RichTextEditor from './rich-text-editor';
 import LinkButton from '../../components/link-button'
 
@@ -53,8 +52,8 @@ class ProductAddUpdate extends Component{
        console.log('发送请求', name, description, price, category)
 
        // 收集上传的图片文件名的数组
-      //  const imgs = this.pwRef.current.getImgs()
-      //  console.log('imgs', imgs)
+       const imgs = this.pwRef.current.getImgs()
+       console.log('imgs', imgs)
       //  // 输入的商品详情的标签字符串
       //  const detail = this.editorRef.current.getDetail()
       //  console.log('detail', detail)
@@ -159,14 +158,14 @@ componentWillMount () {
              </Select>
            )}
          </Item>
-         {/* <Item label="商品图片">
+         <Item label="商品图片">
            <PicturesWall ref={this.pwRef} imgs={product.imgs}/>
-         </Item> */}
+         </Item>
          {/* <Item label="商品详情" wrapperCol={{ span: 20 }}>
            <RichTextEditor ref={this.editorRef} detail={product.detail}/>
          </Item> */}
          <Item>
-           <Button type="primary" htmlType="submit">提交</Button>
+           <Button type="primary" htmlType="submit">保存</Button>
          </Item>
       </Form>
      </Card>

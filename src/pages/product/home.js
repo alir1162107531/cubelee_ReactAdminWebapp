@@ -216,7 +216,7 @@ export default class ProductHome extends Component{
   }
 
   render(){
-      const {loading,products,total,showStatus,searchKey,searchValue} = this.state;
+      const {loading,products,total,searchKey,searchValue} = this.state;
 
       const title = (
         <span>
