@@ -1,10 +1,5 @@
 
-// export function formateDate(time) {
-//   if (!time) return ''
-//   let date = new Date(time)
-//   return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() +
-//     ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
-// }
+//优化带星期的时间格式
 export function formateDate(t) {
   if (!t) return ''
     let str = '';
@@ -37,4 +32,11 @@ export function formateDate(t) {
     if(ww === 6)  ww="星期六";
     str =  yy + "-" + MM + "-" + dd + " " + hh + ":" + mm + ":" + ss + "  " + ww;
   return str;
+}
+
+export function formateNormalDate(time) {
+  if (!time) return ''
+  let date = new Date(time)
+  return date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() +
+    ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
 }

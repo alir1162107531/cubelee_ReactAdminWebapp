@@ -60,7 +60,7 @@ class ProductAddUpdate extends Component{
 
        // 封装product对象
       //  const product = {name, description, price, category, imgs, detail}
-       const product = {name,cpno, description, price, category}
+       const product = {name,cpno, description, price, category,imgs}
        if (this.isUpdate) {
          product.id = this.product.id
        }
@@ -88,7 +88,11 @@ componentWillMount () {
 
  render() {
    const { categorys } = this.state;
-   const {isUpdate, product} = this;
+   let {isUpdate, product} = this;
+
+   if(product && product.imgs && typeof(product.imgs) === 'string'){
+    product.imgs = product.imgs.split(',');
+   }
 
    const { getFieldDecorator } = this.props.form;
   

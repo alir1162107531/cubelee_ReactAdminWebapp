@@ -4,6 +4,7 @@ import LinkButton from "../../components/link-button";
 import memoryUtils from '../../utils/memoryUtils';
 import {reqCategory,reqProduct} from '../../api';
 import {Redirect} from 'react-router-dom';
+import { BASE_IMG_URL } from "../../utils/constant";
 
 const Item = List.Item;
 
@@ -44,11 +45,15 @@ export default class ProductDetail extends Component{
 
       const {categoryName} = this.state;
 
-      const product = this.state.product;
+      let product = this.state.product;
 
       if(!product || !product.id){
         return <Redirect to="/product"/>
       }
+
+      if(product && product.imgs && typeof(product.imgs) === 'string'){
+        product.imgs = product.imgs.split(',');
+       }
 
       let status = product?product.status:this.state.status;
 
@@ -91,15 +96,14 @@ export default class ProductDetail extends Component{
             <span className="detail-left">所属分类:</span>&nbsp;&nbsp;
             <span>{categoryName}</span>
           </Item>
-          {/* <Item>
+          <Item>
             <span className="detail-left">商品图片:</span>
             <span>
               {
-                product.imgs && product.imgs.map(img => <img className="detail-img" key={img} src={BASE_IMG + img} alt="img" />)
+                product.imgs && product.imgs.map(img => <img className="detail-img" key={img} src={BASE_IMG_URL + img} alt="img" />)
               }
-              
             </span>
-          </Item> */}
+          </Item>
           <Item>
             <span className="detail-left">商品详情:</span>
             <div dangerouslySetInnerHTML={{ __html: product.detail}}></div>
