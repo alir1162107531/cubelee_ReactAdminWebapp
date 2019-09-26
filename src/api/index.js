@@ -113,10 +113,30 @@ export const reqDelProduct = ({productId}) => ajax.post('/manage/product/delete'
 export const reqDeleteImg = (name) =>ajax.post('/manage/img/delete',{name})
 
 // 获取所有角色的列表
-export const reqRoles = () => ajax('/manage/role/list')
+export const reqRoles1 = () => ajax('/manage/role/list')
+
+export const reqRoles =({pageNum,pageSize}) =>ajax.post('/manage/role/list',{
+  params:{//包含所有query参数的对象
+    pageNum,
+    pageSize
+  }
+})
 // 添加角色
-export const reqAddRole = (roleName) => ajax.post('/manage/role/add', {
-  roleName
+export const reqAddRole = (role) => ajax.post('/manage/role/add', {
+  role
 })
 // 更新角色
 export const reqUpdateRole = (role) => ajax.post('/manage/role/update', role)
+
+export const reqUsers = ({pageNum,pageSize}) => ajax.post('/manage/user/list',{
+  params:{
+    pageNum,
+    pageSize
+  }
+})
+// 删除指定用户
+export const reqDeleteUser = (userId) => ajax.post('/manage/user/delete', {
+  userId
+})
+// 添加/更新用户
+export const reqAddOrUpdateUser = (user) => ajax.post('/manage/user/' + (user.id ? 'update' : 'add'), user)

@@ -3,7 +3,8 @@ import echarts from 'echarts';
 import 'echarts/map/js/china';
 import mapJson from 'echarts/map/json/china.json';
 import {geoCoordMap,alirl} from './geo';
-import EchartsGl from 'echarts-gl/dist/echarts-gl.js'
+import EchartsGl from 'echarts-gl/dist/echarts-gl.js';
+import {reqRoles } from '../../api';
 
 import './home.less';
 
@@ -148,12 +149,26 @@ export default class Home extends Component{
       // let $dom = document.getElementById
     }
 
+    getRoles=async ()=>{
+      const obj = {pageNum:1,pageSize:1000}
+      const result = await reqRoles(obj);
+      let rolemetas = [];
+      if(result.code === 0){
+        rolemetas = result.items;
+      }
+      localStorage.setItem('roles',JSON.stringify(rolemetas));
+    }
+
     componentWillMount(){
       this.initStyle();
     }
 
     componentDidMount(){
         this.initDatas();
+        // let roles = localStorage.getItem('roles');
+        // if(CubeUtilitys.isNull(roles)){
+        //   this.getRoles();
+        // }
     }
 
     render(){

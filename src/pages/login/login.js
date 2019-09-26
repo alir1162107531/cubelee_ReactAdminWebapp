@@ -10,6 +10,10 @@ import {message} from 'antd';
 import {Redirect} from 'react-router-dom';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
+import {reqRoles } from '../../api';
+import CubeUtilitys from '../../utils/CubeUtilitys';
+
+
 
 const Item = Form.Item;
 /**
@@ -77,24 +81,52 @@ class Login extends Component{
         )
     }
 
+    getRoles = async (res)=>{
+      const obj = {pageNum:1,pageSize:1000}
+      const result = await reqRoles(obj);
+      let rolemetas = [];
+      if(result.code === 0){
+        rolemetas = result.items;
+        this.roles = rolemetas;
+        this.commonHandle(res);
+      }
+      localStorage.setItem('roles',JSON.stringify(rolemetas));
+    }
+
+    commonHandle(result){
+      let user = result.data;
+      let role =  null;
+      let menus = [];
+      if(this.roles.length > 0 ){
+        role = this.roles.find(it=>it.id === user.roleid);
+      }
+      if(!CubeUtilitys.isNull(role) && !CubeUtilitys.isNull(role.menus)){
+        menus = role.menus.split(',');
+      }
+      user['role'] = {roleid:result.data.roleid,menus:menus}
+      storageUtils.saveUser(user);
+      //保存到内存中
+      memoryUtils.user = user;
+      this.props.history.replace('/');
+      message.success(result.msg);
+    }
+
     handleSubmit = e => {
         //阻止默认行为：提交
         e.preventDefault();
-/*        const form =  this.props.form;
-        const props = form.getFieldsValue();
-        const username = form.getFieldValue('userno');
-        const password = form.getFieldValue('password');
-        console.error(username,password);*/
         this.props.form.validateFields(async (err, {userno,password})=>{
             if(!err){
               const result = await reqLogin(userno,password);
               if(result.status === 0){
                 // localStorage.setItem('user_key',JSON.stringify(result));
-                storageUtils.saveUser(result.data);
-                //保存到内存中
-                memoryUtils.user = result.data;
-                this.props.history.replace('/');
-                message.success(result.msg);
+                this.getRoles(result);
+                // let roles = localStorage.getItem('roles');
+                // if(CubeUtilitys.isNull(roles)){
+                //   this.getRoles(result);
+                // }else{
+                //   this.roles = JSON.parse(roles);
+                //   this.commonHandle(result);
+                // }
               }else{
                 message.error(result.msg + '请检查用户名和密码！');
               }

@@ -110,6 +110,8 @@ export default class Category extends Component{
         } else {
           message.error(action + '失败!');
         }
+      }else{
+        message.error('输入有误，请检查！');
       }
     })
     }

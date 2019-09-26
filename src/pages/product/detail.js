@@ -2,8 +2,8 @@ import React,{ Component } from "react";
 import {Card,Icon,List} from 'antd';
 import LinkButton from "../../components/link-button";
 import memoryUtils from '../../utils/memoryUtils';
+import CubeUtilitys from '../../utils/CubeUtilitys';
 import {reqCategory,reqProduct} from '../../api';
-import {Redirect} from 'react-router-dom';
 import { BASE_IMG_URL } from "../../utils/constant";
 
 const Item = List.Item;
@@ -36,7 +36,8 @@ export default class ProductDetail extends Component{
           this.setState({
             product
           })
-          this.getCategory(product.id); // 获取对应的分类
+          if(!CubeUtilitys.isNull(product.category))
+              this.getCategory(product.category); // 获取对应的分类
         }
       }
     }
@@ -47,9 +48,9 @@ export default class ProductDetail extends Component{
 
       let product = this.state.product;
 
-      if(!product || !product.id){
-        return <Redirect to="/product"/>
-      }
+      // if(!product || !product.id){
+      //   return <Redirect to="/product"/>
+      // }
 
       if(product && product.imgs && typeof(product.imgs) === 'string'){
         product.imgs = product.imgs.split(',');

@@ -95,24 +95,6 @@ export default class ProductHome extends Component{
     ];
   }
 
-
-  getProducts1 = async (pageNum)=>{
-    const {pageSize} = this.state;
-    const result = await reqProducts(pageNum,pageSize);
-    if(result.code === 0){
-      const {items}  = result;
-      const {total} = result.pager;
-      this.setState({
-        products: items,
-        pageNum,
-        curCount: items.length,
-        total
-      },()=>{
-        window.location.hash = `#${pageNum}`
-      });
-    }
-  }
-
   getProducts = async (pageNum)=>{
     this.pageNum = pageNum;
     const {pageSize,searchKey,searchValue} = this.state;
@@ -212,11 +194,20 @@ export default class ProductHome extends Component{
   }
 
   componentDidMount(){
-    this.getProducts(1);
+    this.pageNum = this.pageNum?this.pageNum:1;
+    if(this.props.history && this.props.history.location && this.props.history.location.state && this.props.history.location.state.action === 'add'){
+      if(this.state.curCount === this.state.pageSize){
+        this.pageNum = this.pageNum +1;
+      }
+    }
+    this.getProducts(this.pageNum);
+    // this.getProducts(1);
   }
 
   render(){
-      const {loading,products,total,searchKey,searchValue} = this.state;
+      const {loading,products,total,pageSize,searchKey,searchValue,pageNum} = this.state;
+
+      this.pageNum = pageNum;
 
       const title = (
         <span>
@@ -256,7 +247,7 @@ export default class ProductHome extends Component{
                   dataSource = {products}
                   pagination = {{
                     total,
-                    defaultPageSize:3,
+                    defaultPageSize:pageSize,
                     showQuickJumper:true,
                     onChange:this.getProducts,
                     current: this.pageNum

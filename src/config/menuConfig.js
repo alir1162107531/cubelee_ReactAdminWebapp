@@ -2,7 +2,8 @@ const menuList = [
   {
     title: '欢迎页',
     key: '/home',
-    icon: 'home'
+    icon: 'home',
+    public: true
   },{
     title: '商品',
     key: '/products',

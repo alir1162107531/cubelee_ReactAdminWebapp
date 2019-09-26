@@ -5,19 +5,25 @@ import { Form, Input } from "antd"
 const Item = Form.Item
 class AddForm extends PureComponent{
   static propTypes = {
-    setForm: PropTypes.func.isRequired
+    setForm: PropTypes.func.isRequired,
+    role: PropTypes.object,
+  }
+
+  componentWillMount(){
+    this.props.setForm(this.props.form)
   }
 
   render(){
-    const {getFieldDecorator} = this.props.form
+    console.log(this.props)
+    const {getFieldDecorator} = this.props.form;
     const formItemLayout = {
       labelCol: {span: 5},
       wrapperCol: {span: 16}
     }
 
     return(
-      <Form>
-          <Item label='角色名称' {...formItemLayout}>
+      <Form {...formItemLayout}>
+          <Item label='角色名称'>
             {
               getFieldDecorator('roleName',{
                 initialValue: '',
@@ -27,6 +33,15 @@ class AddForm extends PureComponent{
               })(<Input type="text" placeholder="请输入角色名称"/>)
             }
           </Item>
+          <Item label="角色描述">
+          {
+            getFieldDecorator('roleDesc', {
+              initialValue: ''
+            })(
+              <Input type="text" placeholder="请输入角色名称" />
+            )
+          }
+        </Item>
       </Form>
     )
   }

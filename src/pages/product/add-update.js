@@ -69,7 +69,7 @@ class ProductAddUpdate extends Component{
        const result = await reqAddUpdateProduct(product)
        if (result.code === 0) {
          message.success(`${this.isUpdate ? '修改' : '添加'}商品成功`)
-         this.props.history.replace('/product')
+         this.props.history.replace('/product',{action:'add'})
        } else {
          message.error(result.msg);
        }

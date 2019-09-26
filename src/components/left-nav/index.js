@@ -5,6 +5,7 @@ import logo from '../../assets/images/logo.jpg';
 import menuList from '../../config/menuConfig';
 
 import './index.less';
+import memoryUtils from '../../utils/memoryUtils';
 
 const {SubMenu} = Menu;
 
@@ -47,39 +48,52 @@ class LeftNav extends Component{
         const Path = this.props.location.pathname;
 
         return menuList.reduce((preNodes,item)=>{
-            if(!item.children){
-                preNodes.push(
-                    <Menu.Item key={item.key}>
-                       <Link to={item.key}>
-                        <Icon type={item.icon}/>
-                        <span>{item.title}</span>
-                       </Link>
-                    </Menu.Item>
-                )  
-            }else{
+          if(this.hasAuth(item)){
+              if(!item.children){
+                  preNodes.push(
+                      <Menu.Item key={item.key}>
+                        <Link to={item.key}>
+                          <Icon type={item.icon}/>
+                          <span>{item.title}</span>
+                        </Link>
+                      </Menu.Item>
+                  )  
+              }else{
+                  const cItem = item.children.find(citem=>Path.indexOf(citem.key) === 0);
+                  if(cItem){
+                      this.openKey = item.key;
+                  }
 
-                // const cItem = item.children.find(citem=>citem.key === Path);
-                const cItem = item.children.find(citem=>Path.indexOf(citem.key) === 0);
-                if(cItem){
-                    this.openKey = item.key;
-                }
-
-                preNodes.push(
-                    <SubMenu key={item.key} 
-                        title={
-                            <span>
-                                <Icon type={item.icon}/>
-                                <span>{item.title}</span>
-                            </span>}
-                    >
-                    {
-                        this.getMenuNodes2(item.children)
-                    }
-                    </SubMenu>
-                )
-            }
+                  preNodes.push(
+                      <SubMenu key={item.key} 
+                          title={
+                              <span>
+                                  <Icon type={item.icon}/>
+                                  <span>{item.title}</span>
+                              </span>}
+                      >
+                      {
+                          this.getMenuNodes2(item.children)
+                      }
+                      </SubMenu>
+                  )
+              }
+          }
             return preNodes;
         },[])
+    }
+
+    hasAuth =(item) => {
+      const user = memoryUtils.user
+      const menus = user.role.menus
+      if(user.userno === 'lr' || item.public || menus.indexOf(item.key)!==-1){
+        return true
+      }else if(item.children){
+        const chdItem = item.children.find(cItem => menus.indexOf(cItem.key)!==-1)
+        return !!chdItem
+      }
+
+      return false
     }
 
     /* 
