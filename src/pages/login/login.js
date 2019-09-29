@@ -5,13 +5,14 @@ import React,{Component} from 'react';
 import { Form, Icon, Input, Button } from 'antd';
 import './login.less';
 import logo from '../../assets/images/logo.jpg';
-import { reqLogin } from '../../api';
-import {message} from 'antd';
+// import { reqLogin } from '../../api';
 import {Redirect} from 'react-router-dom';
 import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import {reqRoles } from '../../api';
 import CubeUtilitys from '../../utils/CubeUtilitys';
+import {login} from '../../redux/actions'
+import {connect} from 'react-redux'
 
 
 
@@ -26,12 +27,11 @@ const Item = Form.Item;
 class Login extends Component{
 
     render(){
-        // let kitem = localStorage.getItem('user_key');
-        // let res = JSON.parse(kitem);
-        // let res = storageUtils.getUser();
-        let res = memoryUtils.user;
-        if(res && res.data !== undefined){
-          return <Redirect to="./"/>
+
+        let res = this.props.user;
+
+        if(res && res.id !== undefined){
+          return <Redirect to="./home"/>
         }
 
         const {getFieldDecorator} = this.props.form;
@@ -81,20 +81,19 @@ class Login extends Component{
         )
     }
 
-    getRoles = async (res)=>{
+    getRoles = async (user)=>{
       const obj = {pageNum:1,pageSize:1000}
       const result = await reqRoles(obj);
       let rolemetas = [];
       if(result.code === 0){
         rolemetas = result.items;
         this.roles = rolemetas;
-        this.commonHandle(res);
+        this.commonHandle(user);
       }
       localStorage.setItem('roles',JSON.stringify(rolemetas));
     }
 
-    commonHandle(result){
-      let user = result.data;
+    commonHandle(user){
       let role =  null;
       let menus = [];
       if(this.roles.length > 0 ){
@@ -103,38 +102,40 @@ class Login extends Component{
       if(!CubeUtilitys.isNull(role) && !CubeUtilitys.isNull(role.menus)){
         menus = role.menus.split(',');
       }
-      user['role'] = {roleid:result.data.roleid,menus:menus}
+      user['role'] = {roleid:user.roleid,menus:menus}
       storageUtils.saveUser(user);
       //保存到内存中
       memoryUtils.user = user;
-      this.props.history.replace('/');
-      message.success(result.msg);
     }
 
+    /**react版本的登录处理 */
+    // handleSubmit = e => {
+    //     //阻止默认行为：提交
+    //     e.preventDefault();
+    //     this.props.form.validateFields(async (err, {userno,password})=>{
+    //         if(!err){
+    //           const result = await reqLogin(userno,password);
+    //           if(result.status === 0){
+    //             this.getRoles(result);
+    //           }else{
+    //             message.error(result.msg + '请检查用户名和密码！');
+    //           }
+    //         }else{
+    //             message.error('验证失败！');
+    //         }
+    //     })
+    // }
+
+    /**redux版本登录处理 */
     handleSubmit = e => {
-        //阻止默认行为：提交
-        e.preventDefault();
-        this.props.form.validateFields(async (err, {userno,password})=>{
-            if(!err){
-              const result = await reqLogin(userno,password);
-              if(result.status === 0){
-                // localStorage.setItem('user_key',JSON.stringify(result));
-                this.getRoles(result);
-                // let roles = localStorage.getItem('roles');
-                // if(CubeUtilitys.isNull(roles)){
-                //   this.getRoles(result);
-                // }else{
-                //   this.roles = JSON.parse(roles);
-                //   this.commonHandle(result);
-                // }
-              }else{
-                message.error(result.msg + '请检查用户名和密码！');
-              }
-            }else{
-                message.error('验证失败！');
-            }
-        })
-    }
+      //阻止默认行为：提交
+      e.preventDefault();
+      this.props.form.validateFields(async (err, {userno,password})=>{
+          if(!err){
+            this.props.login(userno,password)
+          }
+      })
+  }
 
     validatePwd = (rule,value,callback)=>{
         value = value.trim();
@@ -154,4 +155,11 @@ class Login extends Component{
 
 const WrapperForm = Form.create()(Login);
 
-export default WrapperForm;
+export default connect(
+  state=>({
+    user:state.user
+  }),
+  {
+    login
+  }
+)(WrapperForm);

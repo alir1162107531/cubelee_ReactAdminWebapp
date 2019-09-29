@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
 import {withRouter} from 'react-router-dom';
-import memoryUtils from '../../utils/memoryUtils';
-import storageUtils from '../../utils/storageUtils';
 import {Modal} from 'antd';
 import menuList from '../../config/menuConfig';
 import {formateDate} from '../../utils/dateUtils';
 import {reqWeather} from '../../api';
 import LinkButton from '../../components/link-button';
+import {connect} from 'react-redux'
+import {logout} from '../../redux/actions'
 
 import './index.less';
 
@@ -22,9 +22,7 @@ class TopHead extends Component{
        Modal.confirm({
          title: '确认退出吗？',
          onOk:()=>{
-          storageUtils.removeUser();
-          memoryUtils.user = {};
-          this.props.history.replace('/login');
+          this.props.logout();
          },
          onCancel:()=>{
           console.log('取消');
@@ -72,8 +70,9 @@ class TopHead extends Component{
     }
 
     render(){
-        let userinfo = memoryUtils.user;
-        const title = this.getTitle();
+        let userinfo = this.props.user;
+        // const title = this.getTitle();
+        const title = this.props.headerTitle;
         const {currentTime,dayPictureUrl,weather} = this.state;
         return (
             <div className="top-head">
@@ -95,4 +94,10 @@ class TopHead extends Component{
     }
 }
 
-export default withRouter(TopHead);
+export default connect(
+  state=>({
+    headerTitle:state.headerTitle,
+    user: state.user
+  }),
+  {logout}
+)(withRouter(TopHead))

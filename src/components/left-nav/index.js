@@ -3,9 +3,10 @@ import {Link,withRouter} from 'react-router-dom';
 import {Menu,Icon} from 'antd';
 import logo from '../../assets/images/logo.jpg';
 import menuList from '../../config/menuConfig';
+import {connect} from 'react-redux';
+import {setHeaderTitle} from '../../redux/actions';
 
 import './index.less';
-import memoryUtils from '../../utils/memoryUtils';
 
 const {SubMenu} = Menu;
 
@@ -50,9 +51,13 @@ class LeftNav extends Component{
         return menuList.reduce((preNodes,item)=>{
           if(this.hasAuth(item)){
               if(!item.children){
+                 if(item.key === Path || Path.indexOf(item.key) ===0){
+                  this.props.setHeaderTitle(item.title)
+                 }
+
                   preNodes.push(
                       <Menu.Item key={item.key}>
-                        <Link to={item.key}>
+                        <Link to={item.key} onClick={()=>this.props.setHeaderTitle(item.title)}>
                           <Icon type={item.icon}/>
                           <span>{item.title}</span>
                         </Link>
@@ -84,8 +89,8 @@ class LeftNav extends Component{
     }
 
     hasAuth =(item) => {
-      const user = memoryUtils.user
-      const menus = user.role.menus
+      const user = this.props.user
+      const menus = user.menus
       if(user.userno === 'lr' || item.public || menus.indexOf(item.key)!==-1){
         return true
       }else if(item.children){
@@ -144,4 +149,10 @@ class LeftNav extends Component{
  * 向外暴露，使用高阶组件withRouter()来包装非路由组件
  * 新组件向LeftNav传递：history/match/location
   */
-export default withRouter(LeftNav)
+export default connect(
+  state=>({
+    user: state.user
+  }),{
+    setHeaderTitle
+  }
+)(withRouter(LeftNav))

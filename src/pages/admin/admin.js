@@ -3,7 +3,7 @@
  */
 import React,{Component} from 'react';
 import {Redirect,Switch,Route} from 'react-router-dom';
-import memoryUtils from '../../utils/memoryUtils';
+import {connect} from 'react-redux';
 import {Layout} from 'antd';
 import LeftNav from '../../components/left-nav';
 import TopHead from '../../components/top-head';
@@ -21,13 +21,10 @@ import Pie from '../charts/pie';
 import './admin.less';
 const {Footer,Sider,Content} = Layout;
 
-export default class Admin extends Component{
+class Admin extends Component{
     render(){
         let user = null;
-        // let kitem = localStorage.getItem('user_key');
-        // let res = JSON.parse(kitem);
-        // let res = storageUtils.getUser();
-        let res = memoryUtils.user;
+        let res = this.props.user;
         console.log(res);
         if(res && res.id !== undefined){
            user = res;
@@ -64,3 +61,9 @@ export default class Admin extends Component{
         )
     }
 }
+
+export default connect(state=>({user:state.user})
+,{
+  
+  }
+)(Admin)
