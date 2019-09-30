@@ -147,7 +147,7 @@ export default class User extends Component{
           const {total} = result.pager;
         // 生成一个对象容器(属性名: 角色的ID值, 属性值是角色的名称)
         const roles = JSON.parse(localStorage.getItem('roles'))
-        if(roles.length >0)
+        if(roles && roles.length >0)
           this.roleNames = roles.reduce((pre, role) => {
             pre[role.id] = role.name
             return pre
@@ -175,7 +175,7 @@ export default class User extends Component{
 
     render(){
 
-      const {loading,users,roles,isShow,total,pageSize} = this.state
+      const {users,roles,isShow,total,pageSize} = this.state
 
       const user = this.user||{}
 

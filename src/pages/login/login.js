@@ -133,6 +133,12 @@ class Login extends Component{
       this.props.form.validateFields(async (err, {userno,password})=>{
           if(!err){
             this.props.login(userno,password)
+            setTimeout(() => {
+              let user = storageUtils.getUser();
+              console.log(user);
+              if(!CubeUtilitys.isNull(user))
+                this.getRoles(user)
+            }, 200);
           }
       })
   }

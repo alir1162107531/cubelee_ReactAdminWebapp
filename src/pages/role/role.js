@@ -1,4 +1,4 @@
-import React,{Component} from 'react'
+import React,{PureComponent} from 'react'
 import { Button,Card, Table, Modal,message,Icon} from 'antd'
 import LinkButton from '../../components/link-button'
 import memoryUtils from '../../utils/memoryUtils'
@@ -10,7 +10,7 @@ import AuthForm from './auth-form';
 
 // import './home.less';
 
-export default class Role extends Component{
+export default class Role extends PureComponent{
     
     state = {
       loading:false,
@@ -91,7 +91,6 @@ export default class Role extends Component{
         this.setState({
           isShowAdd: false
         })
-        console.log(values);
         const result = await reqAddRole({name:values.roleName,description:values.roleDesc})
         if (result.code===0) {
           this.form.resetFields();
@@ -152,7 +151,7 @@ export default class Role extends Component{
   }
 
     render(){
-
+        console.log('add role render()');
         const {loading,roles,isShowAdd,isShowAuth,total,pageSize} = this.state
 
         const role = this.role || {}
