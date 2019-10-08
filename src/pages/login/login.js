@@ -11,8 +11,8 @@ import storageUtils from '../../utils/storageUtils';
 import memoryUtils from '../../utils/memoryUtils';
 import {reqRoles } from '../../api';
 import CubeUtilitys from '../../utils/CubeUtilitys';
-import {login} from '../../redux/actions'
-import {connect} from 'react-redux'
+import {login} from '../../redux/actions';
+import {connect} from 'react-redux';
 
 
 
