@@ -147,14 +147,23 @@ export default class Role extends PureComponent{
   }
 
   componentDidMount() {
-    this.getRoles(1)
+    this.pageNum = this.pageNum?this.pageNum:1;
+    if(this.props.history && this.props.history.location && this.props.history.location.state && this.props.history.location.state.action === 'add'){
+      if(this.state.curCount === this.state.pageSize){
+        this.pageNum = this.pageNum +1;
+      }
+    }
+    this.getRoles(this.pageNum);    
+    // this.getRoles(1)
   }
 
     render(){
         console.log('add role render()');
-        const {loading,roles,isShowAdd,isShowAuth,total,pageSize} = this.state
+        const {loading,roles,isShowAdd,isShowAuth,total,pageSize,pageNum} = this.state
 
         const role = this.role || {}
+
+        this.pageNum = pageNum
 
         if(role && role.menus && typeof(role.menus) === 'string'){
           role.menus = role.menus.split(',');

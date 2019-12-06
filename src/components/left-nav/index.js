@@ -7,10 +7,18 @@ import {connect} from 'react-redux';
 import {setHeaderTitle} from '../../redux/actions';
 
 import './index.less';
+import CubeUtilitys from '../../utils/CubeUtilitys';
 
 const {SubMenu} = Menu;
 
 class LeftNav extends Component{
+
+
+    rootSubmenuKeys = ['/products','/charts'];
+
+    state = {
+      openKeys: ['/home']
+    }
 
     //根据基本数据生成目录结构
     //方法一
@@ -57,7 +65,11 @@ class LeftNav extends Component{
 
                   preNodes.push(
                       <Menu.Item key={item.key}>
-                        <Link to={item.key} onClick={()=>this.props.setHeaderTitle(item.title)}>
+                        <Link to={item.key} onClick={()=>
+                          {
+                            this.props.setHeaderTitle(item.title)
+                          }
+                          }>
                           <Icon type={item.icon}/>
                           <span>{item.title}</span>
                         </Link>
@@ -101,12 +113,33 @@ class LeftNav extends Component{
       return false
     }
 
+    onSelect = selectKey=>{
+      const isOpenKey = this.rootSubmenuKeys.find(it=> it=== selectKey.key)
+      if(CubeUtilitys.isNull(isOpenKey) && selectKey.item.props.parentMenu.isRootMenu){
+        this.setState({
+          openKeys:[]
+        })
+      }
+    }
+
+    onOpenChange = openKeys =>{
+      const latestOpenKey = openKeys.find(key=> this.state.openKeys.indexOf(key)===-1)
+      if(this.rootSubmenuKeys.indexOf(latestOpenKey) === -1){
+        this.setState({openKeys})
+      }
+      this.setState({
+        openKeys:latestOpenKey?[latestOpenKey]:[]
+      })
+    }
+
     /* 
         第一次render之后执行一次
         执行异步：如ajax/启动定时器
     */
     componentDidMount(){
-
+        this.setState({
+          openKeys:[this.openKey]
+        })
     }
 
     /**
@@ -136,7 +169,10 @@ class LeftNav extends Component{
                 {/* defaultSelectedKeys：总是根据第一次指定的key进行显示
                     selectedKeys:总是根据最新指定的key进行显示
                  */}
-                <Menu selectedKeys={[selectKey]} defaultOpenKeys={[this.openKey]} mode="inline" theme="dark">
+                {/* <Menu mode="inline" selectedKeys={[selectKey]} defaultOpenKeys={[this.openKey]} theme="dark">
+                    {this.menuNodes}
+                </Menu>  */}
+                <Menu mode="inline"  selectedKeys={[selectKey]} openKeys={this.state.openKeys} onOpenChange={this.onOpenChange} onSelect={this.onSelect} theme="dark">
                     {this.menuNodes}
                 </Menu> 
             </div>
@@ -153,6 +189,6 @@ export default connect(
   state=>({
     user: state.user
   }),{
-    setHeaderTitle
+    setHeaderTitle,
   }
 )(withRouter(LeftNav))

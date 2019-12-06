@@ -14,6 +14,7 @@ function headerTitle(state = initHeaderTitle,action){
   }
 }
 
+
 /**用户登录reducer */
 const initUser = storageUtils.getUser()
 function user(state = initUser,action){

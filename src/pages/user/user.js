@@ -170,14 +170,23 @@ export default class User extends Component{
     }
 
     componentDidMount(){
-      this.getUsers(1)
+      this.pageNum = this.pageNum?this.pageNum:1;
+      if(this.props.history && this.props.history.location && this.props.history.location.state && this.props.history.location.state.action === 'add'){
+        if(this.state.curCount === this.state.pageSize){
+          this.pageNum = this.pageNum +1;
+        }
+      }
+      this.getUsers(this.pageNum);
+      // this.getUsers(1)
     }
 
     render(){
 
-      const {users,roles,isShow,total,pageSize} = this.state
+      const {users,roles,isShow,total,pageSize,pageNum} = this.state
 
       const user = this.user||{}
+
+      this.pageNum = pageNum
 
       const title = <Button type="primary" onClick={
         this.showAdd

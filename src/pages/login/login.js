@@ -136,7 +136,7 @@ class Login extends Component{
             setTimeout(() => {
               let user = storageUtils.getUser();
               console.log(user);
-              if(!CubeUtilitys.isNull(user))
+              if(!CubeUtilitys.isNull(user) && !CubeUtilitys.isNull(user.id))
                 this.getRoles(user)
             }, 200);
           }

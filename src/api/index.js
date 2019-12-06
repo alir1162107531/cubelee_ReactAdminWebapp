@@ -1,6 +1,6 @@
 
 import ajax from './ajax';
-import jsonp from 'jsonp';
+// import jsonp from 'jsonp';
 import { message } from 'antd';
 
 // const BASE_URL = 'http://localhost:4000';
@@ -30,15 +30,29 @@ export const reqLogin = (userno,password)=>(
 
 export const reqWeather = (city)=>{
   return new Promise((resolve) => { 
-    const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
-    jsonp(url, {}, (error, data) => {
-      if (!error && data.error===0) { // 成功的
-        const {dayPictureUrl, weather} = data.results[0].weather_data[0];
-        resolve({dayPictureUrl, weather});
-      } else { // 失败的
-        message.error('获取天气信息失败!');
+    const url  =  'https://free-api.heweather.com/v5/weather?key=19713447578c4afe8c12a351d46ea922'
+    ajax.get(url,{
+      params: {
+        city: city
       }
-    })
+    }).then(function (res) {
+        let weatherObj = res.HeWeather5[0].daily_forecast[0];
+        let weather = '    ' + weatherObj.cond.txt_d + '转' + weatherObj.cond.txt_n +'/'+weatherObj.tmp.min + '~' + weatherObj.tmp.max + '℃';
+        message.info(weatherObj.wind.dir+weatherObj.wind.sc+'级')
+        resolve({weather})
+    }
+    )
+    /**该方法刷新有bug显示第一条是昨日的天气 */
+    // const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
+    // jsonp(url, {city:city}, (error, data) => {
+    //   if (!error && data.error===0) { // 成功的
+    //     const {dayPictureUrl, weather,date,wind} = data.results[0].weather_data[0]
+    //     message.info(date + wind)
+    //     resolve({dayPictureUrl, weather})
+    //   } else { // 失败的
+    //     message.error('获取天气信息失败!')
+    //   }
+    // })
   })
 }
 
