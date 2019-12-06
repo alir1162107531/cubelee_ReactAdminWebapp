@@ -48,7 +48,7 @@ class Login extends Component{
                             {   getFieldDecorator('userno',{
                                     initialValue:'',
                                     rules:[
-                                        {required:true,whitespace:true,message:'用户名必填！'},
+                                        {required:true,whitespace:true,message:'用户名必填!'},
                                         {min:2,message:'长度大于等于2位！'},
                                         {max:12,message:'长度不得大于12位！'},
                                         {pattern:/^[a-zA-Z0-9_]+$/,message:'用户名包含字母、数字或下划线！'},
