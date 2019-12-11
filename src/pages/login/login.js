@@ -2,7 +2,7 @@
  * Created by Administrator on 2019/8/26.
  */
 import React,{Component} from 'react';
-import { Form, Icon, Input, Button } from 'antd';
+import { Form, Icon, Input, Button, message } from 'antd';
 import './login.less';
 import logo from '../../assets/images/logo.jpg';
 // import { reqLogin } from '../../api';
@@ -132,12 +132,15 @@ class Login extends Component{
       e.preventDefault();
       this.props.form.validateFields(async (err, {userno,password})=>{
           if(!err){
-            this.props.login(userno,password)
+            this.props.login(userno,password);
             setTimeout(() => {
               let user = storageUtils.getUser();
               console.log(user);
-              if(!CubeUtilitys.isNull(user) && !CubeUtilitys.isNull(user.id))
+              if(!CubeUtilitys.isNull(user) && !CubeUtilitys.isNull(user.id)){
                 this.getRoles(user)
+              }else{
+                message.error('登录名或密码错误！');
+              }
             }, 200);
           }
       })
